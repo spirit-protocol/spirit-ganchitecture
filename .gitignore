@@ -1,0 +1,68 @@
+# OS / editor
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+creds-*.json
+credentials.env
+*-secret.json
+
+# Node (if any tooling lands later)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Python (if any tooling lands later)
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Build / dist
+dist/
+build/
+.next/
+.output/
+out/
+
+# Large assets (renders, video, raw audio) — keep light, link to drive
+*.mp4
+*.mov
+*.avi
+*.wav
+*.aiff
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# Internal scratch / unsigned drafts
+scratch/
+scratch-*
+WIP-*
+DRAFT-*
+TODO-DELETE-*
+
+# Logs
+*.log
+logs/
+
+# Coverage
+coverage/
+.nyc_output/
