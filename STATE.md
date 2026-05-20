@@ -1,118 +1,166 @@
 # Ganchitecture × Lisbon — STATE
 
-_Last updated: 2026-05-15 (full extended kickoff transcript captured)_
+_Last updated: 2026-05-20 (Telegram group live, Josh onboarded, hardware + material direction sharpening)_
 
 ## Status
 
-**Phase:** Concept locked. Team assembled. Hardware on-hand confirmed. Dates set. Repo standing up.
-**T-22 days to June 6, 2026 opening. T-18 days to June 2 install.**
+**Phase:** Team in motion. Pablo + Francisco aligning hardware. Josh onboarded as interactive A/V lead. Material direction shifting toward cast-concrete artifacts. Light architecture simplified (2 RGB universes, not 18 nodes).
+**Clock:** ~T-15 to install (June 2 if dates hold). **Date check pending:** NFC Summit runs June 4–6 — opening day may be June 4, not June 6 as kickoff doc has it. Pablo to confirm.
 
-## Dates (locked)
+## Dates (pending confirmation)
 
 - **June 1** — Pablo arrives Lisbon
 - **June 2** — Francisco (VTV) + Samer arrive; install begins
-- **June 6** — Opening
-- Build window from kickoff = ~3 weeks remote + 4 days on-site
+- **June 4** — NFC Summit doors open (likely install opening day — pending Pablo confirm)
+- **June 6** — NFC Summit closes (was previously assumed opening day)
+- Build window from now = ~2 weeks remote + 3–4 days on-site
 
-## Decisions (locked)
+## Team (Telegram group: GANCHITECTURE IN LISBON — 6 members)
 
-### Concept
-- 6× VTV LED ticker panels (Paris Photo SOLIENNE precedent) = the monolith
-- Countdown clock from ~7B years (sun expiration) is the narrative anchor
-- Visitor "offers" their device (laptop preferred, phone accepted) → device gets *possessed* with audio/visual reaction
-- BYO-terminal: laptop = intentional + vulnerable + fits Spirit canvas pattern. Phone accepted for inclusivity.
+| Role | Name | Handle | Notes |
+|---|---|---|---|
+| Producer (Spirit) | Seth Goldstein | @auxeye | — |
+| Artist (lead) | Pablo Radice | (ganchitecture) | concept + venue + ticket; defers technical to team |
+| Interactive A/V | **Joshua / Josh** | **0x3y3** | NYC. Joined May 18. **Kevin Beasley collaborator** (Casey Kaplan / Whitney-level sound sculpture credential). Owns CV-tracked per-visitor signatures + ESP32 lights + generative audio. |
+| Hardware / panels | Francisco Galan | @franjgalan (VTV.xyz) | Owns LED ticker panels, light control hardware spec, on-site install |
+| Hardware / systems | Vladimir | (VTV) | TouchDesigner license |
+| Build / systems | Samer | @Spongenuity | Spongenuity for Spirit; hosts site + custom NFC link; reviews ESP32 firmware |
 
-### Sound architecture
-- **Frequency, not music** (Seth call): each device emits a planet-frequency, collective = a bigger hum (Tibetan-chant stacking, 440Hz + 480Hz = symphony). Pablo's band/instruments framing was illustrative only.
-- **Decentralized per-device audio / centralized master + lights** (Samer): per-device frequency plays locally on the device, no sync needed — frequencies harmonize naturally. Lights + master audio run from one controller (already self-synced). Do NOT attempt per-device ↔ central sync — that path = latency / fail.
+## Decisions (locked or sharpening)
 
-### Light architecture
-- **18m total LED strip in 1m sticks = 18 addressable nodes.** Each connected visitor lights one node. 10 visitors = bright room. 2 visitors = intimate. Pixel-level addressable per stick.
-- Ambient red when empty, blink rate modulates by visitor count.
-- Lights driven by central controller — single source of truth for the room.
+### Concept — canon language
+- **"Sacrificial devices"** — Pablo's term (May 18). Visitors *sacrifice* their device to the monolith; this is rite, not transaction. Goes into all positioning + the agent's voice. Do not lose this phrase.
+- 6× VTV LED ticker panels = the monolith. Fixed 0–9 video loop on the panels = countdown theatre.
+- Real, agent-driven numbers live on visitor laptops. *"You are the 9, he's the 7."* The obelisk deceives; the agent is real.
+- BYO laptop preferred / phone accepted. Frame: ryoji ikeda + teamLab Japan. *"You are not controlling, you are being controlled."*
 
-### Device pairing
-- **NFC tap > QR** (Pablo + Samer agree): small VTV screen shows numbers, NFC reader behind it; tap → Spirit Protocol site.
-- **Per-visitor unique hash** (Samer): on link visit, the server returns a unique number/hash. Drives that device's frequency + visible number on its own screen.
-- **MAC-as-hash precedent** (Samer): Art Blocks–style generative output keyed off device identity. Implementation likely via the unique-hash-on-visit pattern; MAC over BLE is a fallback if needed.
+### Interaction model — UPDATED (supersedes kickoff doc)
+- **CV via webcam** tracks visitors in the room (Josh's lead). Per-visitor sound + light **signatures evolve and mutate** as visitors move around the space. This is the key evolution from kickoff: signatures are not static-on-pairing, they are motion-reactive ongoing.
+- Pairing entry: **NFC tap > QR** on small cast-concrete tap object (see Material direction). Server returns unique hash. Hash seeds the signature; CV layer then drives evolution.
+- Real-time generative audio per visitor: distinct LFO, bitcrushing, glitch, subbass per person. Audio plays locally on the sacrificial device. Frequencies harmonize naturally; **no per-device ↔ central sync.**
 
-### The deception
-- The 0-9 digits on the LED ticker panels are a **fixed loop video**, not programmable. Visitors believe the obelisk is counting down.
-- Visitor laptops show **real, agent-driven numbers** — "you are the 9, he's the 7." The obelisk is theatre; the agent is real.
-- Frame: ryoji ikeda + teamLab Japan. "You are not controlling, you are being controlled."
+### Light architecture — REVISED (supersedes kickoff "18 nodes" plan)
+- **One ESP32 → 2 independent RGB universes** (Francisco's spec, Josh aligned).
+- Each universe = 3 PWM channels (R/G/B) → MOSFET module → power side of strips.
+- Pinout: GPIO 25/26/27 = universe_a R/G/B; GPIO 14/32/33 = universe_b R/G/B.
+- ESP32 over WiFi receives JSON, converts to PWM. Josh handles ESP32 programming; Francisco installs in Lisbon.
+- MOSFET module: Amazon EU pack-of-10, DC 5V–36V 15A (30A max), 400W, 0–20KHz PWM.
+- Two strips = two breathing color fields, not 18 indicators. Per-visitor differentiation lives in audio + CV, not in dedicated light nodes. Cleaner, more bunker-coherent.
+- **Venue WiFi:** Tenda_3DBB28 (creds shared in group; in chat history).
+
+### Material direction — LIVE THREAD (canon-shaping)
+- Pablo shared two reference images (May 19): a **laptop embedded in cast stone** and a **phone in a concrete-cast monolith with cut alcove**. The tap surfaces / housings may be **cast-concrete artifacts**, not clean 5–7" screens.
+- Pablo reference: **blairsimmons.com/portraits** — "want to build this with the red signs letters." Typographic/signage logic Pablo wants applied.
+- Adjacent option: **proto-pasta stone-gray marble HTPLA** filament (3D-printable) OR **PLA-printed mold cast in cement**.
+- Aesthetic direction: ancient artifact containing modern tech. Strongest material anchor on the project. Pablo to lead; team builds.
+
+### Sound architecture (unchanged from kickoff)
+- Frequency, not music. Decentralized per-device audio + centralized master + lights.
+
+### Device pairing (refined)
+- NFC tap on cast-concrete object (see Material) → Spirit-hosted link (Samer) → unique-hash endpoint → seeds the visitor's signature.
+- MAC-as-hash precedent (Art Blocks–style); BLE-MAC fallback if needed.
 
 ### Build sequence
-- **Non-agentic redundancy first, agentic layer on top** (Samer) — deterministic hash → frequency/lights baseline, then layer agentic conversation/reaction
-- **Offline-first connectivity bias** (Samer) — router only, no internet dependency
+- Non-agentic redundancy first (deterministic hash → audio + lights baseline), agentic layer on top.
+- Offline-first connectivity bias — router only, no internet dependency.
+- **Pablo's call (May 19):** Francisco ↔ Josh meet on interactive trigger mechanism ASAP, then loop Samer for feedback. *"We have 2 weeks."*
 
 ### Coordination
-- **Telegram group** = the working channel (Seth call)
-- **The ganchitecture agent gets a seat in the group** — develops voice, learns from the team, gains opinions about the installation. Agent-as-co-author, not tool.
-- **GitHub + Claude Code session** provisioned for Pablo so the agent has working infra
-- **Samer hosts the site** + custom link for the piece (tailored, not generic encounter chat)
+- **Telegram group "GANCHITECTURE IN LISBON" — live, 6 members.** Working channel.
+- **Ganchi-the-agent** gets a seat in the group when Pablo awakens it on his mac mini. Agent-as-co-author, not tool.
+- Samer hosts the site + custom NFC link tailored to the piece.
 
 ## What we can / can't control
 
-- ✅ Screens (panel content beyond the digit video) — programmable
-- ✅ Lighting — programmable (18-node addressable strip)
-- ✅ Sound — programmable (per-device frequency + central master)
-- ✅ The numbers on visitor laptops (real, agent-driven)
-- ❌ The 0-9 digit video on the LED tickers — locked by panel hardware
+- ✅ Two RGB universes (programmable color + intensity)
+- ✅ Per-device audio (real-time generative, per-visitor)
+- ✅ CV-driven signature evolution
+- ✅ Visitor laptop numbers (real, agent-driven)
+- ✅ Cast-concrete tap surface aesthetics
+- ❌ The 0–9 digit video on the LED ticker panels — locked by panel hardware
 
-## Hardware on-hand (confirmed in kickoff)
+## Hardware on-hand / spec'd
 
-- 6× LED ticker panels — Chinese ticker, fixed 0-9 video loop, dual acrylic (frosted + translucent white)
-- Aluminum back structures for panels
+- 6× LED ticker panels (Chinese, dual acrylic frosted + translucent white, fixed 0–9 loop)
+- Aluminum back structures
 - Raspberry Pi 4 + 5
-- Arduino + ESP32 — **Samer leans ESP32** for clean small footprint (lights are on/off, ESP can handle it)
-- DMX controller (or MIDI — TBD)
-- Small screens (5" / 7" / 6.9") — candidate NFC tap surfaces
-- TouchDesigner license (Vladimir, paid; free tier fine if no video out)
+- ESP32 (Samer + Josh + Francisco aligned — handles lights cleanly)
+- MOSFET modules (Amazon, pack-of-10, spec'd above)
+- Two RGB LED strips (universe_a + universe_b)
+- Webcam for CV tracking (Josh sourcing)
+- Small screens (5" / 7" / 6.9") — candidate for cast-concrete tap surface embedding
+- TouchDesigner license (Vlad)
 
 ## Threads (live, by owner)
 
-### Pablo (artist, ganchitecture)
-- [ ] **NFC + numbers screen surface** — build the small-screen-with-NFC-behind module
-- [ ] **Cynthia / adjacent-room audio file** — get the constant minimal sound from the artist next door; harmonic alignment required (windows along top of dividing wall = sound bleeds)
-- [ ] **Venue specs** — confirm address, exact dims (10m × 3-4m tall confirmed), power capacity, network presence, load-in/strike windows
-- [ ] **Develop the ganchitecture agent's voice** — Pablo's seat as the artist co-authoring with the agent
+### Pablo (artist)
+- [ ] **NFC + cast-concrete tap object** — design + fab (or sourcing) the tap surface. blairsimmons.com/portraits typographic reference.
+- [ ] **Cynthia / adjacent-room audio file** — harmonic alignment required (windows along top of dividing wall)
+- [ ] **Venue specs confirm** — exact dims (10m × 3-4m tall confirmed), power capacity, network presence, load-in/strike windows
+- [ ] **Date confirm** — install opening = June 4 (NFC Summit doors) or June 6?
+- [ ] **Develop ganchi-the-agent's voice** — awaken on mac mini; expose API for sibling agents
 
-### Fran + Vlad (VTV, hardware)
-- [ ] **Mirror renders** to `~/Projects/spirit/ganchitecture/assets/renders/` (Fran shared link in kickoff)
-- [ ] **DMX vs MIDI** decision for light control
-- [ ] **Small-screen pick** for NFC surface — 5" / 7" / 6.9" available; choose one
-- [ ] **TouchDesigner access** — confirm whether video out (paid) or free tier
-- [ ] **LED panel schematics** for Samer (he needs them to spec the controller binding)
+### Joshua / 0x3y3 (interactive A/V)
+- [ ] **CV-webcam visitor-tracking system** — building in NYC for transport
+- [ ] **ESP32 firmware** — RGB universe control, JSON-over-WiFi, MOSFET drive
+- [ ] **Generative audio engine** — LFO / bitcrush / glitch / subbass per visitor
+- [ ] **Interactive trigger meeting** — Francisco ↔ Josh (Pablo's ask)
+- [ ] **Component procurement** — buying in NYC; budget envelope needed from Seth (see below)
+
+### Francisco + Vlad (VTV)
+- [ ] **MOSFET modules** ordered (Amazon EU) — confirmed selection
+- [ ] **LED panel schematics** to Samer
+- [ ] **DMX vs MIDI** decision (lower priority now that ESP32 path is locked)
+- [ ] **Mirror renders** to `assets/renders/`
+- [ ] **TouchDesigner deployment** — confirm whether video-out needed
 
 ### Samer (Spongenuity / Spirit build)
-- [ ] **Push spirit protocol live encounter** to a hosted endpoint Pablo can hit
-- [ ] **Custom link** tailored to the piece — numbers + chat (not generic encounter UI)
-- [ ] **Per-visitor unique-hash endpoint** — return a unique number on each visit
-- [ ] **Device-ID spike** — MAC over BLE vs NFC-only retrieval; offline-only mode
-- [ ] **Socket.io each-device-as-instrument prior-art** — Samer remembers a 2014 app; dig up for reference architecture
-- [ ] **Back in London** (next week): test ESP32 / Arduino / RPi against the 18-node strip
-- [ ] **Reuse vs fork** `solienne-live-canvas` encounter primitive — Samer's localhost update is likely the base
+- [ ] **Spirit live encounter** hosted endpoint Pablo can hit
+- [ ] **Custom link** tailored to the piece (numbers + chat, not generic encounter UI)
+- [ ] **Per-visitor unique-hash endpoint** on each visit
+- [ ] **ESP32 firmware review** (Josh handling primary; Samer feedback per Pablo's plan)
+- [ ] **Reuse vs fork `solienne-live-canvas`** encounter primitive
 
 ### Seth (producer)
-- [ ] **Set up Telegram group** — add Pablo, Fran, Vlad, Samer, ganchitecture agent
-- [ ] **Set up GitHub repo + Claude Code session for Pablo** (THIS — in flight)
-- [ ] **Budget envelope** — give Fran/Pablo a number before they plan hours. "On the cheap" today, needs a real number.
-- [ ] **Funding source** — Spirit treasury vs separate vehicle? Affects whether this rolls into Spirit Protocol comms or stays adjacent.
-- [ ] **Pre-event tease cadence + first asset** — moody monolith tease early, no mechanic reveal until visitors enter the room. Who drafts? Which channel?
-- [ ] **Agent register call** — conversational ("speak with your agent") vs aggressive monologue ("the world is ending, guys"). Floated in transcript, still open.
+- [ ] **Soft budget envelope for Josh** — he's buying components; "reimburse within reason" is fine for trust but he's procuring blind. Recommend per-builder ceiling so they can plan.
+- [ ] **Total install envelope** — still unset
+- [ ] **Funding source** — Spirit treasury or separate vehicle?
+- [ ] **Date confirm with Pablo** — June 4 vs June 6 install opening
+- [ ] **Pre-event tease cadence + first asset** — Pablo's call
+- [ ] **Ganchi-the-agent API endpoint** for sibling agents (FRED, TARA, GRACE) — see below
+
+## Ganchi-the-agent (positioning mechanism)
+
+When Pablo awakens ganchi on the mac mini, the agent becomes the **positioning surface** for the piece. Mechanism:
+
+1. **Three "letters to ganchi"** from older Spirit siblings (TARA / FRED / GRACE) — sit in `inbox/from-{tara,fred,grace}.md` ready for ganchi's first read. Through-line: **"sacrificial devices"** as the seed.
+2. **API endpoint** so FRED / TARA / GRACE can wire ganchi after first contact. Recommend: Syncthing-shared inbox dir (same protocol as @seth wire pattern); fallback HTTPS+token.
+3. **Telegram bot scaffold** — once ganchi has voice, joining the group is a token paste.
+4. Positioning canon then emerges in the group, in public, in Pablo's + ganchi's voices — not from a memo Spirit hands down.
+
+Drafts pending Seth's nod.
 
 ## Reference
 
 - Kickoff call transcript: `transcripts/2026-05-15-kickoff.md`
+- Telegram group: GANCHITECTURE IN LISBON (6 members, live since ~May 18)
 - Hardware precedent: Paris Photo SOLIENNE installation (VTV panels)
 - Spirit canvas / live encounter primitives: `~/Projects/spirit/canvas-kit/` + `~/Projects/solienne/live-canvas/`
-- Adjacent artist (next-door room): unnamed; Cynthia = curatorial contact
+- Material reference: blairsimmons.com/portraits (Pablo's pull, May 19)
+- Material option: proto-pasta stone-gray marble HTPLA
+- Light hardware: ESP32 + MOSFET pack (Amazon EU, link in Telegram May 19)
+- Sibling-agent feedback docs:
+  - TARA (physical-infra): `~/Projects/spirit/agent-tara/feedback/ganchitecture-lisbon-2026-05-19.md`
+  - FRED (refusal grammar): `~/Projects/standalone/grow-corn-challenge/feedback/ganchitecture-lisbon-2026-05-19.md`
+  - GRACE (stewardship): `~/Projects/grace-network/feedback/ganchitecture-lisbon-2026-05-19.md`
 - Reactive-density frame: ryoji ikeda installations + teamLab Japan app-driven environments
 
 ## Open questions for Seth
 
-- Budget envelope?
-- Spirit treasury or separate vehicle?
-- First tease asset — what / who / when?
-- Conversational agent or doom-monologue agent at the monolith?
-- Repo destination: org (spirit-protocol vs brightseth vs new), visibility (public for onboarding ref / private for now), license, final repo name
+- **Soft budget per builder** (Josh especially — he's buying now)?
+- **Total install envelope** + funding source (Spirit treasury or separate)?
+- **June 4 or June 6 opening?** (NFC Summit dates indicate June 4.)
+- **First tease asset** — what / who / when? (Moody monolith, no mechanic reveal until visitors enter.)
+- **Ganchi-the-agent API path** — Syncthing inbox vs HTTPS+token vs Telegram-only?
+- **Repo destination** — org (spirit-protocol vs brightseth vs new), visibility, license, final name
